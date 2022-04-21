@@ -1,2 +1,2 @@
-# 42lib
-My 42 libft
+# 42libft
+Our 42libft
