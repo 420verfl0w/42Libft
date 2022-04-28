@@ -3,56 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stales <stales@student.42.angouleme.fr>    +#+  +:+       +#+        */
+/*   By: brda-sil <brda-sil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 18:54:45 by stales            #+#    #+#             */
-/*   Updated: 2022/04/21 12:26:54 by stales           ###   ########.fr       */
+/*   Updated: 2022/04/28 13:09:18 by brda-sil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdlib.h>
 
-static char	*init_str(char const *s, char c)
-{
-	int		i;
-	char	*ptr;
-
-	i = 0;
-	while (s[i] && s[i] != c)
-		i++;
-	ptr = (char *)malloc(sizeof(char) * (i + 1));
-	if (!ptr)
-		return (NULL);
-	ft_strlcpy(ptr, s, i + 1);
-	return (ptr);
-}
-
 char	**ft_split(char const *s, char c)
 {
-	int		i[2];
-	char	**ptr;
+	char	**tab;
+	char	*token;
+	size_t	size;
 
-	if (!s)
+	if (!*s)
 		return (NULL);
-	i[1] = ft_get_words(s, c);
-	ptr = (char **)malloc(sizeof(char *) * (i[1]));
-	i[0] = -1;
-	while (ptr && ++i[0] < i[1])
+	size = ft_get_words((char *)s, c) + 1;
+	tab = (char **)malloc(sizeof(char *) * size);
+	size = 0;
+	token = ft_strtok((char *)s, &c);
+	while (token)
 	{
-		while (s[0] == c)
-			s++;
-		ptr[i[0]] = init_str(s, c);
-		if (!ptr[i[0]])
-		{
-			while (i[0] > 0)
-				free(ptr[i[0]--]);
-			free(ptr);
-			return (NULL);
-		}
-		s = s + ft_strlen(ptr[i[0]]);
+		tab[size] = (char *)malloc(sizeof(char) * ft_strlen(token) + 1);
+		ft_strcpy(tab[size], token);
+		token = ft_strtok(NULL, &c);
+		size++;
 	}
-	if (ptr)
-		ptr[i[0]] = 0;
-	return (ptr);
+	tab[size] = NULL;
+	return (tab);
 }
